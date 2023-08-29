@@ -1,25 +1,34 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Poppins } from "next/font/google";
+'use client';
+import { Metadata } from "next";
+import React from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Header from "@/app/components/Header/Header";
+import useUserData from "@/app/hooks/useUserData";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark', // Enable dark mode
+    },
 });
-
-export const metadata: Metadata = {
-  title: 'Enlightify',
-  description: 'An immersive learning experience.',
-}
-
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return (
+    const metadata: Metadata = {
+        title: 'Enlightify',
+        description: 'Courses for the curious learner',
+    }
+    const userData = useUserData();
+
+    return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body style={{background: 'black', color: 'white', maxWidth: '80rem', margin: 'auto'}}>
+          <ThemeProvider theme={darkTheme}>
+              <Header userData={userData}/>
+              {children}
+          </ThemeProvider>
+      </body>
     </html>
-  )
+  );
 }
