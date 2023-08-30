@@ -5,12 +5,18 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import scss from './Header.module.scss';
 import {Typography} from "@mui/material";
+import { UserDataType } from '@/app/hooks/useUserData';
+import ThemeToggler from '../ThemeToggler/ThemeToggler';
 
-interface HeaderProps {
-    userData: any; // Update the type according to your userData structure
+export type HeaderProps = {
+    userData: UserDataType | null;
+    ColorModeContext: React.Context<{ toggleColorMode: () => void }>;
+    currentMode: "light" | "dark"; // Prop for the current mode
+    showLabel?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ userData }) => {
+const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+    const { userData, ColorModeContext, currentMode, showLabel } = props;
     const router = useRouter(); // Initialize the useRouter hook
     const handleSignOut = () => {
         router.push('/logout');
@@ -41,6 +47,13 @@ const Header: React.FC<HeaderProps> = ({ userData }) => {
                             </li>
                         </>
                     )}
+                    <li style={{ marginLeft: "auto" }}>
+                        <ThemeToggler
+                          ColorModeContext={ColorModeContext}
+                          currentMode={currentMode}
+                          showLabel={showLabel}
+                        />
+                    </li>
                 </ul>
                 {
                     userData?.isLoggedIn ? (
